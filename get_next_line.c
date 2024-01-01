@@ -16,12 +16,13 @@ char	*gnl_strjoin(char *str, char *buffer)
 	char	*new_line;
 	int		i;
 	int		j;
+	int		buff_size;
 
 	i = 0;
-	new_line = (char *)malloc(sizeof(char) * (gnl_strlen(buffer)
-				+ gnl_strlen(str) + 1));
+	buff_size = gnl_strlen(buffer);
+	new_line = (char *)malloc(sizeof(char) * (buff_size + gnl_strlen(str) + 1));
 	if (!new_line)
-		return (free(new_line), NULL);
+		return (free(str), NULL);
 	while (str[i])
 	{
 		new_line[i] = str[i];
@@ -29,7 +30,7 @@ char	*gnl_strjoin(char *str, char *buffer)
 	}
 	j = 0;
 	free(str);
-	while (buffer[j] && buffer[j - 1] != '\n')
+	while (j < buff_size && buffer[j - 1] != '\n')
 		new_line[i++] = buffer[j++];
 	new_line[i] = '\0';
 	return (new_line);
@@ -66,7 +67,7 @@ int	update_gnl(char *new_buff, char *buff, char **str)
 
 char	*read_line(int fd, char *str, char *buff)
 {
-	int	readed;
+	ssize_t	readed;
 
 	readed = 1;
 	while (readed > 0)
